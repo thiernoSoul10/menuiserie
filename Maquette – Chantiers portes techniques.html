@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="fr"><head><meta charset="utf-8"><title>Maquette – Chantiers portes techniques</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#eef1f3;--sf:#fff;--ink:#17212b;--mut:#5d6b78;--ln:#d5dce2;--ac:#1f5f8b;--acb:#fff;--ok:#237a4b;--okb:#e0f2e8;--wa:#945d0a;--wab:#fbeccd;--lk:#4b5563;--lkb:#e5e7eb;--er:#a32d2d;--erb:#fbe1e1;--inb:#dcebf5;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10171d;--sf:#18222b;--ink:#e6ecf1;--mut:#97a6b3;--ln:#2c3a46;--ac:#6db3e3;--acb:#0c1a24;--ok:#6fd09a;--okb:#16372a;--wa:#f0be5e;--wab:#3d2f10;--lk:#b6c0ca;--lkb:#2a343d;--er:#f19a9a;--erb:#431c1c;--inb:#1b3447}}
+:root[data-theme="dark"]{--bg:#10171d;--sf:#18222b;--ink:#e6ecf1;--mut:#97a6b3;--ln:#2c3a46;--ac:#6db3e3;--acb:#0c1a24;--ok:#6fd09a;--okb:#16372a;--wa:#f0be5e;--wab:#3d2f10;--lk:#b6c0ca;--lkb:#2a343d;--er:#f19a9a;--erb:#431c1c;--inb:#1b3447}
+html,body{height:auto}*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 "IBM Plex Sans",system-ui,sans-serif}
+header{background:var(--sf);border-bottom:1px solid var(--ln);padding:10px 16px;display:flex;flex-wrap:wrap;gap:10px;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);z-index:5}
+header b{font-size:16px;margin-right:auto}
+nav{display:flex;gap:4px;flex-wrap:wrap}
+nav button{background:none;border:0;padding:6px 10px;border-radius:6px;color:var(--mut);font:inherit;cursor:pointer}
+nav button.on{background:var(--inb);color:var(--ac);font-weight:600}
+select,input,button{font:inherit;color:var(--ink)}
+select,input[type=text],input[type=number]{background:var(--sf);border:1px solid var(--ln);border-radius:6px;padding:7px 9px;max-width:100%}
+main{max-width:1000px;margin:0 auto;padding:16px}
+h1{font-size:22px;margin:4px 0 14px}h2{font-size:16px;margin:0 0 10px}
+.card{background:var(--sf);border:1px solid var(--ln);border-radius:8px;padding:14px;margin-bottom:14px}
+.btn{background:var(--ac);color:var(--acb);border:0;border-radius:6px;padding:8px 14px;cursor:pointer;font-weight:500}
+.btn.s{background:none;color:var(--ac);border:1px solid var(--ac)}.btn[disabled]{opacity:.45;cursor:not-allowed}
+.bd{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12.5px;font-weight:600;white-space:nowrap}
+.b-prep{background:var(--lkb);color:var(--lk)}.b-val{background:var(--wab);color:var(--wa)}.b-rdy{background:var(--inb);color:var(--ac)}.b-cmd{background:var(--okb);color:var(--ok)}.b-pose{background:var(--ok);color:var(--sf)}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse}th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--ln);vertical-align:middle}th{font-size:13px;color:var(--mut);font-weight:500}
+.mut{color:var(--mut);font-size:13px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:14px}
+.kp div{background:var(--sf);border:1px solid var(--ln);border-radius:8px;padding:10px}.kp strong{font-size:24px;display:block}
+.ck li{list-style:none;padding:3px 0}.ck{padding:0;margin:0}.ok{color:var(--ok)}.ko{color:var(--er)}
+.msg{padding:10px 12px;border-radius:6px;background:var(--wab);color:var(--wa);margin-bottom:12px}
+.msg.e{background:var(--erb);color:var(--er)}.msg.g{background:var(--okb);color:var(--ok)}
+.lk{color:var(--lk);background:var(--lkb);border-radius:4px;padding:1px 6px;font-size:12px}
+a.l{color:var(--ac);cursor:pointer;text-decoration:underline}
+.mob{max-width:430px;margin:0 auto}.mob .btn{width:100%;padding:14px;font-size:16px}
+.grp{border-left:3px solid var(--ac);padding-left:12px;margin-bottom:14px}
+img.ph{max-width:100%;border-radius:6px;margin-top:8px}
+label{display:block;margin:8px 0 3px;font-size:13px;color:var(--mut)}
+@media(max-width:600px){main{padding:10px}h1{font-size:19px}}
+</style></head><body>
+<header><b>Portes techniques · maquette</b><nav id="nav"></nav>
+<label style="margin:0">Je suis <select id="role" onchange="setRole(this.value)"><option>Patron</option><option>Conducteur</option><option>Assistante</option><option>Comptable</option><option>Poseur</option></select></label>
+<button class="btn s" onclick="init()">Réinitialiser</button></header>
+<main id="app"></main>
+<script>
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+let S,n=0;
+const now=()=>new Date().toLocaleString('fr-FR',{dateStyle:'short',timeStyle:'short'});
+function mk(id,nom,po,h,lg,o={}){return Object.assign({id,nom,po,h,lg:lg.map(([f,r,q,c])=>({id:++n,f,r,q,c:!!c})),cotes:false,plans:[],docs:['Contrat.pdf'],vT:false,vP:false,pose:null,msg:null},o)}
+function init(){n=0;S={role:'Patron',view:'dash',cur:null,q:'',flash:null,log:[],ch:[
+mk('CH-101','Bâtiments Durand SA',8,24,[['Fournisseur A','P450',3],['Fournisseur B','X200',2]],{cotes:1,plans:['Plan_101.pdf'],vT:1,vP:1}),
+mk('CH-102','Mairie de Sèvres (via Eiffage)',5,15,[['Fournisseur A','P450',5]],{cotes:1,plans:['Plan_102.pdf'],vT:1,vP:1}),
+mk('CH-103','Groupe Hospitalier Nord',12,40,[['Fournisseur C','CF-60',12]],{cotes:1,vT:1,vP:1}),
+mk('CH-104','Résidence Les Tilleuls',6,18,[]),
+mk('CH-098','Lycée Pasteur',4,10,[['Fournisseur B','X200',4,1]],{cotes:1,plans:['Plan_098.pdf'],vT:1,vP:1})]};
+S.log=[{t:'12/10/2026 09:12',u:'Patron',c:'CH-101',x:'Chantier créé'},{t:'14/10/2026 16:40',u:'Conducteur',c:'CH-101',x:'Validation technique'},{t:'15/10/2026 08:05',u:'Patron',c:'CH-101',x:'Validation patron'}];
+$('#role').value='Patron';render()}
+const get=id=>S.ch.find(c=>c.id===id);
+function log(c,x){S.log.unshift({t:now(),u:S.role,c:c.id,x})}
+function miss(c){const m=[];if(!c.lg.length)m.push('Aucune ligne fournisseur / référence / quantité');if(!c.cotes)m.push('Cotes terrain non vérifiées');if(!c.plans.length)m.push('Aucun plan PDF déposé');if(!c.vT)m.push('Validation technique manquante (conducteur / assistante)');if(!c.vP)m.push('Validation patron manquante');return m}
+const ready=c=>!miss(c).length;
+function st(c){const k=c.lg.filter(l=>l.c).length;if(c.pose)return['Pose terminée','pose'];if(c.lg.length&&k==c.lg.length)return['Commandé','cmd'];if(k)return['Commandé partiellement','cmd'];if(ready(c))return['Prêt à commander','rdy'];if(!c.lg.length&&!c.plans.length)return['À préparer','prep'];return['En cours de validation','val']}
+const bd=c=>{const[a,b]=st(c);return`<span class="bd b-${b}">${a}</span>`};
+function inval(c,why){if(c.vT||c.vP){c.vT=c.vP=false;log(c,'Validations invalidées : '+why);c.msg='Les validations ont été remises à zéro suite à votre modification : elles doivent être rejouées.'}}
+const can={prep:()=>['Patron','Conducteur','Assistante'].includes(S.role)};
+function setRole(r){S.role=r;S.view=r==='Poseur'?'pose':(r==='Comptable'?'achats':'dash');S.cur=null;render()}
+function go(v,id){S.view=v;if(id)S.cur=id;S.flash=null;render()}
+function nav(){const v=S.role==='Poseur'?[['pose','Fin de pose']]:[['dash','Tableau de bord'],...(S.role==='Patron'?[['new','Nouveau chantier']]:[]),...(['Comptable','Patron'].includes(S.role)?[['achats','Achats']]:[]),['histo','Historique']];
+$('#nav').innerHTML=v.map(([k,l])=>`<button class="${S.view===k||(k==='dash'&&S.view==='doss')?'on':''}" onclick="go('${k}')">${l}</button>`).join('')}
+function render(){nav();$('#app').innerHTML=({dash,new:nw,doss,achats,pose,histo})[S.view]();}
+function dash(){const q=S.q.toLowerCase(),L=S.ch.filter(c=>(c.id+c.nom).toLowerCase().includes(q));const cnt=k=>S.ch.filter(c=>st(c)[1]===k).length;
+return`<h1>Tableau de bord</h1><div class="kp"><div><strong>${cnt('prep')+cnt('val')}</strong>à préparer / valider</div><div><strong>${cnt('rdy')}</strong>prêts à commander</div><div><strong>${cnt('cmd')}</strong>en achat</div><div><strong>${cnt('pose')}</strong>poses terminées</div></div>
+<div class="card"><input type="text" placeholder="Rechercher une référence ou une entreprise" value="${esc(S.q)}" oninput="S.q=this.value;render();document.querySelector('input[type=text]').focus()" style="width:100%;margin-bottom:10px"><div class="tw"><table><tr><th>Réf.</th><th>Chantier (client)</th><th>Portes</th><th>Statut</th><th>Prochaine action</th></tr>
+${L.map(c=>{const m=miss(c),s=st(c)[1];const nx=s==='pose'?'—':s==='rdy'?'Comptable : commander':s==='cmd'?'Poseur : fin de pose':!c.lg.length||!c.plans.length||!c.cotes?'Conducteur : compléter':!c.vT?'Conducteur : valider':'Patron : valider';
+return`<tr><td><a class="l" onclick="go('doss','${c.id}')">${c.id}</a></td><td>${esc(c.nom)}</td><td>${c.lg.reduce((a,l)=>a+l.q,0)} / ${c.po}</td><td>${bd(c)}</td><td class="mut">${nx}</td></tr>`}).join('')||'<tr><td colspan=5 class="mut">Aucun chantier ne correspond.</td></tr>'}</table></div></div>`}
+function nw(){if(S.role!=='Patron')return'<div class="msg">Seul le patron ouvre un chantier.</div>';
+return`<h1>Nouveau chantier</h1>${S.flash?`<div class="msg e">${S.flash}</div>`:''}<div class="card" style="max-width:520px"><label>Référence chantier (unique)</label><input type="text" id="n1" placeholder="CH-105"><label>Nom de l’entreprise cliente</label><input type="text" id="n2"><label>Nombre de portes (prévisionnel)</label><input type="number" id="n3" min="1"><label>Heures de pose estimées</label><input type="number" id="n4" min="1"><label>Pièces contractuelles</label><input type="file" id="n5" multiple><p class="mut">Adresse, contact, dates : champs candidats, non obligatoires (à arbitrer).</p><button class="btn" onclick="create()">Créer le chantier</button></div>`}
+function create(){const id=$('#n1').value.trim(),nom=$('#n2').value.trim(),po=+$('#n3').value,h=+$('#n4').value;
+if(!id||!nom||!po||!h){S.flash='Renseignez la référence, l’entreprise, le nombre de portes et les heures.';return render()}
+if(get(id)){S.flash='Cette référence existe déjà : choisissez-en une autre.';return render()}
+const c=mk(id,nom,po,h,[],{docs:[...$('#n5').files].map(f=>f.name)});S.ch.unshift(c);log(c,'Chantier créé');go('doss',id)}
+function doss(){const c=get(S.cur),m=miss(c),ed=can.prep(),k=c.lg.filter(l=>l.c).length,s=st(c)[1];
+const msg=c.msg;c.msg=null;
+return`<a class="l" onclick="go('dash')">← Chantiers</a><h1>${c.id} · ${esc(c.nom)} ${bd(c)}</h1>${msg?`<div class="msg">${msg}</div>`:''}
+<div class="card"><div class="row"><span>Portes annoncées : <b>${c.po}</b></span><span>Heures estimées : <b>${c.h}</b></span><span>Portes saisies : <b>${c.lg.reduce((a,l)=>a+l.q,0)}</b></span></div><div class="mut" style="margin-top:6px">Contractuel : ${c.docs.map(esc).join(', ')||'aucun'}</div></div>
+<div class="card"><h2>Lignes de besoins</h2><div class="tw"><table><tr><th>Fournisseur</th><th>Référence</th><th>Qté</th><th>Achat</th><th></th></tr>
+${c.lg.map(l=>`<tr><td>${l.f}</td><td>${esc(l.r)}</td><td>${l.c||!ed?l.q:`<input type="number" min="1" value="${l.q}" style="width:70px" onchange="setQ(${l.id},this.value)">`}</td><td>${l.c?'<span class="bd b-cmd">Commandé</span> <span class="lk">🔒 verrouillée</span>':'<span class="mut">à commander</span>'}</td><td>${!l.c&&ed?`<a class="l" onclick="delL(${l.id})">Supprimer</a>`:''}</td></tr>`).join('')||'<tr><td colspan=5 class="mut">Aucune ligne. Ajoutez la première ci-dessous.</td></tr>'}</table></div>
+${ed?`<div class="row" style="margin-top:10px"><select id="lf"><option>Fournisseur A</option><option>Fournisseur B</option><option>Fournisseur C</option></select><input type="text" id="lr" placeholder="Référence catalogue"><input type="number" id="lq" min="1" value="1" style="width:80px"><button class="btn s" onclick="addL()">Ajouter la ligne</button></div>`:''}</div>
+<div class="card"><h2>Cotes et plans</h2><label style="display:flex;gap:8px;color:var(--ink);font-size:15px"><input type="checkbox" ${c.cotes?'checked':''} ${ed&&!k?'':'disabled'} onchange="setCotes(this.checked)"> Cotes terrain vérifiées et conformes</label><p class="mut" style="margin:2px 0 8px">Variante possible : saisie numérique des cotes (non retenue en V1).</p>
+<div>Plans PDF : ${c.plans.map(p=>`<span class="lk">📄 ${esc(p)}</span>`).join(' ')||'<span class="ko">aucun</span>'}</div>${ed?`<input type="file" accept=".pdf" multiple style="margin-top:8px" onchange="addPlans(this)">`:''}</div>
+<div class="card"><h2>Contrôle et validations</h2>${m.length?`<div class="msg">Ce chantier ne peut pas être « Prêt à commander » :</div><ul class="ck">${m.map(x=>`<li class="ko">✗ ${x}</li>`).join('')}</ul>`:`<div class="msg g">Toutes les conditions sont remplies : statut calculé automatiquement.</div>`}
+<div class="row" style="margin-top:10px"><button class="btn" ${c.vT||k||!['Conducteur','Assistante'].includes(S.role)?'disabled':''} onclick="val('vT')">${c.vT?'✓ Validation technique faite':'Valider (technique)'}</button><button class="btn" ${c.vP||!c.vT||k||S.role!=='Patron'?'disabled':''} onclick="val('vP')">${c.vP?'✓ Validation patron faite':'Valider (patron)'}</button></div><p class="mut">Pas de bouton « forcer prêt à commander » : le statut est déduit des conditions.</p></div>
+${c.pose?`<div class="card"><h2>Pose terminée</h2><p>Déclarée par ${c.pose.u} le ${c.pose.t}</p><img class="ph" src="${c.pose.img}" alt="Photo de fin de pose"></div>`:''}
+<div class="card"><h2>Journal</h2>${S.log.filter(x=>x.c===c.id).map(x=>`<div class="mut">${x.t} · <b>${x.u}</b> · ${x.x}</div>`).join('')}</div>`}
+function setQ(id,v){const c=get(S.cur),l=c.lg.find(x=>x.id===id),o=l.q;l.q=Math.max(1,+v);log(c,`Quantité ${l.f}/${l.r} : ${o} → ${l.q}`);inval(c,'quantité modifiée');render()}
+function addL(){const c=get(S.cur),r=$('#lr').value.trim();if(!r)return;c.lg.push({id:++n,f:$('#lf').value,r,q:+$('#lq').value||1,c:false});log(c,`Ligne ajoutée : ${$('#lf').value} / ${r} × ${$('#lq').value}`);inval(c,'ligne ajoutée');render()}
+function delL(id){const c=get(S.cur);const l=c.lg.find(x=>x.id===id);c.lg=c.lg.filter(x=>x.id!==id);log(c,`Ligne supprimée : ${l.f}/${l.r}`);inval(c,'ligne supprimée');render()}
+function setCotes(v){const c=get(S.cur);c.cotes=v;log(c,'Cotes '+(v?'vérifiées':'décochées'));inval(c,'cotes modifiées');render()}
+function addPlans(i){const c=get(S.cur);[...i.files].forEach(f=>c.plans.push(f.name));log(c,'Plan(s) PDF déposé(s)');render()}
+function val(k){const c=get(S.cur);c[k]=true;log(c,k==='vT'?'Validation technique':'Validation patron');render()}
+function achats(){const need={};S.ch.filter(c=>ready(c)&&!c.pose).forEach(c=>c.lg.forEach(l=>{const key=l.f+'|'+l.r;(need[key]=need[key]||[]).push({c,l})}));
+const keys=Object.keys(need).sort(),canOrd=S.role==='Comptable';
+const open=keys.map(k=>({k,items:need[k].filter(x=>!x.l.c),done:need[k].filter(x=>x.l.c)}));
+const g=open.filter(o=>o.items.length);const done=open.filter(o=>o.done.length);
+const byF={};g.forEach(o=>{(byF[o.k.split('|')[0]]=byF[o.k.split('|')[0]]||[]).push(o)});
+const pend=S.ch.filter(c=>!ready(c)&&!c.pose&&!c.lg.some(l=>l.c)).length;
+return`<h1>Achats consolidés</h1><p class="mut">Seuls les chantiers « Prêt à commander » apparaissent. ${pend} chantier(s) encore non prêt(s) sont exclus.</p>
+${Object.keys(byF).map(f=>`<div class="card"><h2>${f}</h2>${byF[f].map(o=>{const t=o.items.reduce((a,x)=>a+x.l.q,0);return`<div class="grp"><div class="row"><b>${esc(o.k.split('|')[1])}</b><span>total à commander : <b>${t}</b> (${o.items.map(x=>x.l.q).join(' + ')})</span>${canOrd?`<button class="btn s" style="margin-left:auto" onclick="bulk('${o.k}')">Tout marquer commandé</button>`:''}</div>
+<table>${o.items.map(x=>`<tr><td><a class="l" onclick="go('doss','${x.c.id}')">${x.c.id}</a> ${esc(x.c.nom)}</td><td>${x.l.q} porte(s)</td><td>${canOrd?`<label style="margin:0;display:flex;gap:6px;color:var(--ink)"><input type="checkbox" onchange="order(${x.l.id})"> Commandé</label>`:'<span class="mut">lecture seule</span>'}</td></tr>`).join('')}</table></div>`}).join('')}</div>`).join('')||'<div class="card mut">Rien à commander pour le moment.</div>'}
+${done.length?`<div class="card"><h2>Déjà commandé</h2>${done.map(o=>o.done.map(x=>`<div class="mut">✓ ${o.k.replace('|',' / ')} · ${x.l.q} · ${x.c.id} <span class="lk">🔒</span></div>`).join('')).join('')}</div>`:''}`}
+function ordLine(l,c){l.c=true;log(c,`Commandé : ${l.f}/${l.r} × ${l.q} (ligne verrouillée)`)}
+function order(id){S.ch.forEach(c=>c.lg.forEach(l=>{if(l.id===id)ordLine(l,c)}));render()}
+function bulk(k){const[f,r]=k.split('|');const t=S.ch.filter(c=>ready(c)&&!c.pose).flatMap(c=>c.lg.filter(l=>!l.c&&l.f===f&&l.r===r).map(l=>[l,c]));
+if(!confirm(`Marquer ${t.length} ligne(s) ${f} / ${r} comme commandées ? Elles seront verrouillées.`))return;t.forEach(([l,c])=>ordLine(l,c));render()}
+function pose(){const c=S.cur&&get(S.cur);if(!c){const L=S.ch.filter(c=>!c.pose);return`<div class="mob"><h1>Fin de pose</h1><p class="mut">Choisissez votre chantier.</p>${L.map(c=>`<div class="card" onclick="go('pose','${c.id}')" style="cursor:pointer"><b>${c.id}</b> · ${esc(c.nom)}</div>`).join('')||'<div class="card mut">Aucun chantier en cours.</div>'}</div>`}
+if(c.pose)return`<div class="mob"><div class="msg g">Merci ! Fin de pose enregistrée le ${c.pose.t}.</div><img class="ph" src="${c.pose.img}" alt="photo"><button class="btn" style="margin-top:12px" onclick="S.cur=null;render()">Retour aux chantiers</button></div>`;
+return`<div class="mob"><a class="l" onclick="S.cur=null;render()">← Chantiers</a><h1>${c.id} · ${esc(c.nom)}</h1><div class="card"><label>Photo de fin de pose (obligatoire)</label><input type="file" id="ph" accept="image/*" capture="environment" onchange="$('#fin').disabled=!this.files.length"></div><button class="btn" id="fin" disabled onclick="fin()">Mon travail est terminé</button></div>`}
+function fin(){const c=get(S.cur),f=$('#ph').files[0];c.pose={u:S.role,t:now(),img:URL.createObjectURL(f)};log(c,'Fin de pose déclarée avec photo');render()}
+function histo(){return`<h1>Historique</h1><div class="card tw"><table><tr><th>Date</th><th>Auteur</th><th>Chantier</th><th>Action</th></tr>${S.log.map(x=>`<tr><td>${x.t}</td><td>${x.u}</td><td>${x.c}</td><td>${x.x}</td></tr>`).join('')}</table></div>`}
+init();
+</script></body></html>
